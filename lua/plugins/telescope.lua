@@ -25,25 +25,26 @@ return {
 						"--smart-case",
 						"--case-sensitive", -- Add this line to enforce case sensitivity
 					},
-          mappings = {
-            n = {
-              ['<C-d>'] = require('telescope.actions').delete_buffer
-            },
-            i = {
-              ["<C-h>"] = "which_key",
-              ['<C-d>'] = require('telescope.actions').delete_buffer
-            }
-          }
+					mappings = {
+						n = {
+							["<C-d>"] = require("telescope.actions").delete_buffer,
+						},
+						i = {
+							["<C-h>"] = "which_key",
+							["<C-d>"] = require("telescope.actions").delete_buffer,
+							["<C-f>"] = require("telescope.actions").to_fuzzy_refine,
+						},
+					},
 				},
-      })
+			})
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>ff", function()
 				require("telescope.builtin").find_files({
 					find_command = { "rg", "--files", "--hidden", "--glob", "!.git/*", "--glob", "!node_modules/*" },
 				})
 			end, {})
-			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = 'Live grep'})
-      vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find open buffers' })
+			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
+			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find open buffers" })
 
 			-- New function for selecting folder then live grep
 			local function live_grep_in_selected_folder()
@@ -68,8 +69,13 @@ return {
 				})
 			end
 
-      -- from claude live grep over selection
-      vim.api.nvim_set_keymap('v', '<leader>fg', [[y<ESC><cmd>lua require('telescope.builtin').live_grep({ default_text = vim.fn.escape(vim.fn.getreg('"'), '[](){}') })<CR>]], { noremap = true, silent = true })
+			-- from claude live grep over selection
+			vim.api.nvim_set_keymap(
+				"v",
+				"<leader>fg",
+				[[y<ESC><cmd>lua require('telescope.builtin').live_grep({ default_text = vim.fn.escape(vim.fn.getreg('"'), '[](){}') })<CR>]],
+				{ noremap = true, silent = true }
+			)
 			vim.keymap.set("n", "<leader>fgg", live_grep_in_selected_folder, { desc = "Select folder then live grep" })
 
 			require("telescope").load_extension("ui-select")
