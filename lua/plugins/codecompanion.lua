@@ -10,54 +10,49 @@ return {
 		require("codecompanion").setup({
 			strategies = {
 				chat = {
-					adapter = "qwencoder",
+					adapter = "venice",
 				},
 				inline = {
-					adapter = "qwencoder",
+					adapter = "venice",
 				},
 			},
 			adapters = {
-				llamacode = function()
-					return require("codecompanion.adapters").extend("ollama", {
-						name = "llamacode",
+				venice = function()
+					local adapter = require("codecompanion.adapters").extend("openai_compatible", {
 						env = {
-							api_key = "ollama",
-							url = env.LLAMACODE_URL,
+							url = env.OPENAI_URL,
+							api_key = env.API_KEY,
+							chat_url = "/v1/chat/completions",
 						},
 						schema = {
-							model = {
-								default = "llama3:latest",
+							temperature = {
+								mapping = "parameters",
+							},
+							top_p = {
+								mapping = "parameters",
+							},
+							logit_bias = {
+								mapping = "parameters",
 							},
 						},
 					})
-				end,
-				deepseekcoder = function()
-					return require("codecompanion.adapters").extend("ollama", {
-						name = "deepseekcoder",
-						env = {
-							api_key = "ollama",
-							url = env.LLAMACODE_URL,
-						},
-						schema = {
-							model = {
-								default = "deepseek-coder:33b",
-							},
-						},
-					})
-				end,
-				qwencoder = function()
-					return require("codecompanion.adapters").extend("ollama", {
-						name = "qwencoder",
-						env = {
-							api_key = "ollama",
-							url = env.LLAMACODE_URL,
-						},
-						schema = {
-							model = {
-								default = "qwen2.5-coder:32b",
-							},
-						},
-					})
+					local keys_to_remove = {
+						"mirostat_eta",
+						"mirostat",
+						"num_ctx",
+						"top_k",
+						"tfs_z",
+						"seed",
+						"repeat_penalty",
+						"repeat_last_n",
+						"mirostat_tau",
+						"num_predict",
+					}
+
+					for _, key in ipairs(keys_to_remove) do
+						adapter.schema[key] = nil
+					end
+					return adapter
 				end,
 			},
 		})
