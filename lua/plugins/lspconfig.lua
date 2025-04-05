@@ -6,6 +6,7 @@ return {
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 		local lspconfig = require("lspconfig")
 		local configs = require("lspconfig.configs")
+		local util = require("lspconfig.util")
 
 		-- Add folding capabilities required by ufo.nvim
 		capabilities.textDocument.foldingRange = {
@@ -84,25 +85,28 @@ return {
 			},
 		})
 
+		local root_files = {
+			"hardhat.config.js",
+			"hardhat.config.ts",
+			"foundry.toml",
+			"remappings.txt",
+			"truffle.js",
+			"truffle-config.js",
+			"ape-config.yaml",
+		}
 		configs.solidity = {
 			default_config = {
 				cmd = {
-					"npx",
-					"--yes",
+					"pnpx",
 					"@nomicfoundation/solidity-language-server",
 					"--stdio",
 				},
 				filetypes = { "solidity" },
-				root_dir = lspconfig.util.find_git_ancestor,
+				root_dir = util.root_pattern(unpack(root_files)) or util.root_pattern(".git", "package.json"),
 				single_file_support = true,
-				settings = {
-					solidity = {
-						includePath = "",
-						remappings = {},
-					},
-				},
 			},
 		}
+
 		lspconfig.solidity.setup({})
 
 		-- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
