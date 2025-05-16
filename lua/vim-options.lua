@@ -69,3 +69,5 @@ vim.api.nvim_create_autocmd("VimResized", {
   pattern = "*",
   command = "wincmd =",
 })
+
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#303030" })
