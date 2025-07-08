@@ -20,11 +20,6 @@ return {
       nvim_tmux_nav.NvimTmuxNavigateLastActive,
       u.merge({ desc = "Tmux Navigate Last Active" }, o)
     )
-    vim.keymap.set(
-      "n",
-      "<C-Space>",
-      nvim_tmux_nav.NvimTmuxNavigateNext,
-      u.merge({ desc = "Tmux Navigate Next" }, o)
-    )
+    vim.keymap.set("n", "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext, u.merge({ desc = "Tmux Navigate Next" }, o))
   end,
 }

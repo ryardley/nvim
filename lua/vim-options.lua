@@ -43,31 +43,32 @@ vim.keymap.set("n", "<C-_>", ":WhichKey<CR>", u.merge({ desc = "Open WhichKey" }
 vim.keymap.set("v", "<C-_>", ":WhichKey<CR>", u.merge({ desc = "Open WhichKey" }, opts))
 vim.keymap.set("i", "<C-_>", ":WhichKey<CR>", u.merge({ desc = "Open WhichKey" }, opts))
 vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", u.merge({ desc = "Clear highlight" }, opts))
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", u.merge({ desc = "Escape terminal mode" }, opts))
 
 -- For jumping forwards in the quickfix list
 vim.keymap.set("n", "]q", function()
-  local count = vim.v.count1 -- Default to 1 if no count is given
-  vim.cmd(count .. "cnext")
+	local count = vim.v.count1 -- Default to 1 if no count is given
+	vim.cmd(count .. "cnext")
 end, u.merge({ desc = "Next quicklist item" }, opts))
 
 -- For jumping backwards in the quickfix list
 vim.keymap.set("n", "[q", function()
-  local count = vim.v.count1 -- Default to 1 if no count is given
-  vim.cmd(count .. "cprev")
+	local count = vim.v.count1 -- Default to 1 if no count is given
+	vim.cmd(count .. "cprev")
 end, u.merge({ desc = "Prev quicklist item" }, opts))
 
 vim.wo.number = true
 vim.api.nvim_command("command! -nargs=* Qa qa<args>")
 
 vim.filetype.add({
-  extension = {
-    mdx = "markdown.mdx",
-  },
+	extension = {
+		mdx = "markdown.mdx",
+	},
 })
 
 vim.api.nvim_create_autocmd("VimResized", {
-  pattern = "*",
-  command = "wincmd =",
+	pattern = "*",
+	command = "wincmd =",
 })
 
 vim.api.nvim_set_hl(0, "CursorLine", { bg = "#303030" })

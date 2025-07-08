@@ -1,5 +1,13 @@
 {
-    "diagnostics.globals": [
-        "vim"
-    ]
+  "runtime.version": "LuaJIT",
+  "diagnostics.globals": ["vim"],
+  "format": {
+    "enable": true,
+    "defaultConfig": {
+      "indent_style": "space",
+      "indent_size": "2",
+      "insert_final_newline": "true",
+      "trim_trailing_whitespace": "true"
+    }
+  }
 }

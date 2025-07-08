@@ -1,7 +1,7 @@
-return  {
+return {
   "kevinhwang91/nvim-ufo",
   dependencies = {
-    {"kevinhwang91/promise-async"},
+    { "kevinhwang91/promise-async" },
     {
       "luukvbaal/statuscol.nvim",
       config = function()
@@ -26,5 +26,5 @@ return  {
     vim.o.foldlevelstart = 99
     vim.o.foldenable = true
     require("ufo").setup()
-  end
+  end,
 }

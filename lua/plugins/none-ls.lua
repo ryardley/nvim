@@ -18,7 +18,9 @@ return {
     null_ls.setup({
       debug = true,
       sources = {
-        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.stylua.with({
+          extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
+        }),
         null_ls.builtins.formatting.prettier,
         null_ls.builtins.formatting.alejandra,
         -- rustfmt is now registered above, not as a builtin
