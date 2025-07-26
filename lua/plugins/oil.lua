@@ -11,6 +11,8 @@ return {
         ["<C-s>"] = false,
         ["<C-h>"] = false,
         ["<C-t>"] = false,
+        ["<C-l>"] = false,
+        ["<M-l>"] = { "actions.refresh" },
         ["<M-s>"] = {
           "actions.select",
           opts = { vertical = true },
