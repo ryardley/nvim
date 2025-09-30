@@ -4,9 +4,6 @@ return {
   lazy = false,
   config = function()
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
-    local lspconfig = require("lspconfig")
-    local configs = require("lspconfig.configs")
-    local util = require("lspconfig.util")
 
     capabilities.textDocument.completion.completionItem.snippetSupport = false
 
@@ -16,21 +13,31 @@ return {
       lineFoldingOnly = true,
     }
 
-    lspconfig.ts_ls.setup({
+    vim.lsp.config('*', {
       capabilities = capabilities,
     })
 
-    lspconfig.html.setup({
-      capabilities = capabilities,
+    vim.lsp.config('ts_ls', {
+      cmd = { 'typescript-language-server', '--stdio' },
+      filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+      root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+    })
+    vim.lsp.config('html', {
+      cmd = { 'vscode-html-language-server', '--stdio' },
+      filetypes = { 'html' },
+      root_markers = { 'package.json', '.git' },
     })
 
-    lspconfig.lua_ls.setup({
-      capabilities = capabilities,
+    vim.lsp.config('lua_ls', {
+      cmd = { 'lua-language-server' },
+      filetypes = { 'lua' },
+      root_markers = { '.luarc.json', '.luarc.jsonc', '.luacheckrc', 'stylua.toml', '.git' },
     })
 
-    lspconfig.rust_analyzer.setup({
-      capabilities = capabilities,
+    vim.lsp.config('rust_analyzer', {
       cmd = { "rust-analyzer" },
+      filetypes = { 'rust' },
+      root_markers = { 'Cargo.toml', 'Cargo.lock', '.git' },
       settings = {
         ["rust-analyzer"] = {
           cache = {
@@ -51,15 +58,21 @@ return {
           lruCapacity = 1000,
           maxInlayHintLength = 50,
         },
+
       },
     })
 
-    lspconfig["circom-lsp"].setup({
-      capabilities = capabilities,
+    vim.lsp.config('circom-lsp', {
+      cmd = { 'circom-lsp' },
+      filetypes = { 'circom' },
+      root_markers = { '.git' },
     })
 
-    lspconfig.pyright.setup({
-      capabilities = capabilities,
+
+    vim.lsp.config('pyright', {
+      cmd = { 'pyright-langserver', '--stdio' },
+      filetypes = { 'python' },
+      root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git' },
       settings = {
         python = {
           pythonPath = vim.env.VIRTUAL_ENV and (vim.env.VIRTUAL_ENV .. "/bin/python"),
@@ -68,16 +81,7 @@ return {
       },
     })
 
-    -- lspconfig.marksman.setup({
-    --   capabilities = capabilities,
-    --   default_config = {
-    --     filetypes = { "markdown" },
-    --     cmd = { "marksman", "server" }
-    --   },
-    -- })
-
-    lspconfig.mdx_analyzer.setup({
-      capabilities = capabilities,
+    vim.lsp.config('mdx_analyzer', {
       cmd = {
         "npx",
         "--yes",
@@ -85,42 +89,40 @@ return {
         "mdx-language-server",
         "--stdio",
       },
+      filetypes = { "markdown.mdx" },
+      root_markers = { 'package.json', '.git' },
+    })
 
-      default_config = {
-        filetypes = { "markdown.mdx" },
-        cmd = {
-          "npx",
-          "--yes",
-          "@mdx-js/language-server",
-          "mdx-language-server",
-          "--stdio",
-        },
+    vim.lsp.config('solidity', {
+      cmd = {
+        "pnpx",
+        "@nomicfoundation/solidity-language-server",
+        "--stdio",
+      },
+      filetypes = { "solidity" },
+      root_markers = {
+        "hardhat.config.js",
+        "hardhat.config.ts",
+        "foundry.toml",
+        "remappings.txt",
+        "truffle.js",
+        "truffle-config.js",
+        "ape-config.yaml",
+        "package.json",
+        ".git",
       },
     })
 
-    local root_files = {
-      "hardhat.config.js",
-      "hardhat.config.ts",
-      "foundry.toml",
-      "remappings.txt",
-      "truffle.js",
-      "truffle-config.js",
-      "ape-config.yaml",
-    }
-    configs.solidity = {
-      default_config = {
-        cmd = {
-          "pnpx",
-          "@nomicfoundation/solidity-language-server",
-          "--stdio",
-        },
-        filetypes = { "solidity" },
-        root_dir = util.root_pattern(unpack(root_files)) or util.root_pattern(".git", "package.json"),
-        single_file_support = true,
-      },
-    }
-
-    lspconfig.solidity.setup({})
+    vim.lsp.enable({
+      'ts_ls',
+      'html',
+      'lua_ls',
+      'rust_analyzer',
+      'circom-lsp',
+      'pyright',
+      'mdx_analyzer',
+      'solidity',
+    })
 
     -- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
     vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
