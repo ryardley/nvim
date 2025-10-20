@@ -12,7 +12,6 @@ return {
         ["<C-h>"] = false,
         ["<C-t>"] = false,
         ["<C-l>"] = false,
-        ["<CR>"] = false,         -- Disable Return/Enter
         [" "] = "actions.select", -- Use Space to select/open
         ["<M-l>"] = { "actions.refresh" },
         ["<M-s>"] = {
