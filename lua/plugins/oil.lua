@@ -36,7 +36,6 @@ return {
         vim.keymap.set("n", "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown, { buffer = true })
         vim.keymap.set("n", "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp, { buffer = true })
         vim.keymap.set("n", "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight, { buffer = true })
-        vim.keymap.set("n", " ", require("oil").select, { buffer = true, nowait = true })
       end,
     })
 
