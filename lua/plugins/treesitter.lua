@@ -5,6 +5,14 @@ return {
     "JoosepAlviste/nvim-ts-context-commentstring",
   },
   config = function()
-    require("nvim-treesitter").install({ "yaml" })
+    require("nvim-treesitter.configs").setup({
+      ensure_installed = { "yaml" },
+      highlight = {
+        enable = true,
+      },
+      indent = {
+        enable = true,
+      },
+    })
   end,
 }
