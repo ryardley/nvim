@@ -3,6 +3,9 @@ return {
     "nvim-telescope/telescope-ui-select.nvim",
   },
   {
+    "nvim-telescope/telescope-live-grep-args.nvim",
+  },
+  {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
@@ -22,7 +25,11 @@ return {
             "--line-number",
             "--column",
             "--smart-case",
-            "--case-sensitive", -- Add this line to enforce case sensitivity
+            "--case-sensitive",
+            "--glob=!.git/*",
+            "--glob=!node_modules/*",
+            "--glob=!*.lock",
+            "--glob=!package-lock.json",
           },
           mappings = {
             n = {
@@ -42,40 +49,18 @@ return {
           find_command = { "rg", "--files", "--hidden", "--glob", "!.git/*", "--glob", "!node_modules/*" },
         })
       end, {})
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find open buffers" })
 
-      -- New function for selecting folder then live grep
-      local function live_grep_in_selected_folder()
-        builtin.find_files({
-          prompt_title = "Select Folder for Live Grep",
-          find_command = { "fd", "--type", "d" }, -- List only directories
-          attach_mappings = function(prompt_bufnr, map)
-            local select_folder = function()
-              local selection = require("telescope.actions.state").get_selected_entry()
-              require("telescope.actions").close(prompt_bufnr)
-              if selection then
-                builtin.live_grep({
-                  prompt_title = "Live Grep in " .. selection.value,
-                  search_dirs = { selection.value },
-                })
-              end
-            end
-            map("i", "<CR>", select_folder)
-            map("n", "<CR>", select_folder)
-            return true
-          end,
-        })
-      end
+      vim.keymap.set("n", "<leader>fg", function()
+        require("telescope").extensions.live_grep_args.live_grep_args()
+      end, { desc = "Live grep with args" })
 
-      -- from claude live grep over selection
       vim.api.nvim_set_keymap(
         "v",
         "<leader>fg",
-        [[y<ESC><cmd>lua require('telescope.builtin').live_grep({ default_text = vim.fn.escape(vim.fn.getreg('"'), '[](){}') })<CR>]],
+        [[y<ESC><cmd>lua require('telescope').extensions.live_grep_args.live_grep_args({ default_text = vim.fn.escape(vim.fn.getreg('"'), '[](){}') })<CR>]],
         { noremap = true, silent = true }
       )
-      vim.keymap.set("n", "<leader>fgg", live_grep_in_selected_folder, { desc = "Select folder then live grep" })
 
       require("telescope").load_extension("ui-select")
     end,
