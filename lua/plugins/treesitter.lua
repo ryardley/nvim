@@ -9,10 +9,6 @@ return {
   config = function()
     require("nvim-treesitter").install({ "yaml" })
 
-    require("ts_context_commentstring").setup({
-      enable_autocmd = false,
-    })
-
     vim.api.nvim_create_autocmd("FileType", {
       pattern = { "yaml" },
       callback = function()
