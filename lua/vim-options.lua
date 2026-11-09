@@ -1,7 +1,7 @@
 local u = require("utils")
 
 vim.g.mapleader = " "
-vim.wo.relativenumber = true
+vim.opt.relativenumber = true
 vim.opt.clipboard = "unnamedplus"
 vim.opt.cursorline = true
 vim.opt.expandtab = true
@@ -21,7 +21,7 @@ vim.opt.splitright = true
 vim.opt.swapfile = false
 vim.opt.tabstop = 2
 vim.opt.termguicolors = true
-vim.opt.timeoutlen = 400
+vim.opt.timeoutlen = 300
 vim.opt.undofile = true
 vim.opt.equalalways = true
 
@@ -61,8 +61,9 @@ vim.keymap.set("n", "[q", function()
   vim.cmd(count .. "cprev")
 end, u.merge({ desc = "Prev quicklist item" }, opts))
 
-vim.wo.number = true
-vim.api.nvim_command("command! -nargs=* Qa qa<args>")
+vim.api.nvim_create_user_command("Qa", function(opts)
+  vim.cmd("qa" .. (opts.bang and "!" or ""))
+end, { bang = true })
 
 vim.filetype.add({
   extension = {
@@ -74,5 +75,3 @@ vim.api.nvim_create_autocmd("VimResized", {
   pattern = "*",
   command = "wincmd =",
 })
-
-vim.api.nvim_set_hl(0, "CursorLine", { bg = "#303030" })

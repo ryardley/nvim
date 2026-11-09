@@ -1,13 +1,11 @@
 return {
   {
-    "nvim-telescope/telescope-ui-select.nvim",
-  },
-  {
-    "nvim-telescope/telescope-live-grep-args.nvim",
-  },
-  {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-live-grep-args.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+    },
     config = function()
       require("telescope").setup({
         extensions = {
@@ -25,7 +23,6 @@ return {
             "--line-number",
             "--column",
             "--smart-case",
-            "--case-sensitive",
             "--glob=!.git/*",
             "--glob=!node_modules/*",
             "--glob=!*.lock",
@@ -63,6 +60,7 @@ return {
       )
 
       require("telescope").load_extension("ui-select")
+      require("telescope").load_extension("live_grep_args")
     end,
   },
 }

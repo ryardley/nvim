@@ -5,8 +5,6 @@ return {
   config = function()
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-    capabilities.textDocument.completion.completionItem.snippetSupport = false
-
     -- Add folding capabilities required by ufo.nvim
     capabilities.textDocument.foldingRange = {
       dynamicRegistration = false,
@@ -69,23 +67,22 @@ return {
     })
 
 
+    local venv = vim.env.VIRTUAL_ENV
     vim.lsp.config('pyright', {
       cmd = { 'pyright-langserver', '--stdio' },
       filetypes = { 'python' },
       root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git' },
       settings = {
         python = {
-          pythonPath = vim.env.VIRTUAL_ENV and (vim.env.VIRTUAL_ENV .. "/bin/python"),
-          venvPath = vim.env.VIRTUAL_ENV,
+          pythonPath = venv and (venv .. "/bin/python") or nil,
+          venvPath = venv and vim.fn.fnamemodify(venv, ":h") or nil,
+          venv = venv and vim.fn.fnamemodify(venv, ":t") or nil,
         },
       },
     })
 
     vim.lsp.config('mdx_analyzer', {
       cmd = {
-        "npx",
-        "--yes",
-        "@mdx-js/language-server",
         "mdx-language-server",
         "--stdio",
       },
@@ -93,7 +90,7 @@ return {
       root_markers = { 'package.json', '.git' },
     })
 
-    vim.lsp.config('solidity', {
+    vim.lsp.config('solidity_ls_nomicfoundation', {
       cmd = {
         "pnpx",
         "@nomicfoundation/solidity-language-server",
@@ -121,12 +118,12 @@ return {
       'circom-lsp',
       'pyright',
       'mdx_analyzer',
-      'solidity',
+      'solidity_ls_nomicfoundation',
     })
 
     -- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-    vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
-    vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+    vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+    vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
     vim.keymap.set('n', '<space>q', function()
       vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.ERROR })
     end, { desc = "Errors to quickfix" })
@@ -154,9 +151,6 @@ return {
         vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
         vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        vim.keymap.set("n", "<space>f", function()
-          vim.lsp.buf.format({ async = true })
-        end, opts)
 
         -- -- Add rust_analyzer inlay_hints
         -- local client = vim.lsp.get_client_by_id(ev.data.client_id)

@@ -1,9 +1,5 @@
--- Disable deprecated nvim-treesitter module integration for ts-context-commentstring
-vim.g.skip_ts_context_commentstring_module = true
-
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",

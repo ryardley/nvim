@@ -10,7 +10,7 @@ return {
     map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", opts)
     -- Open a vertical terminal with <leader>tv
     map("n", "<leader>tv", "<cmd>ToggleTerm direction=vertical size=80<CR>", opts)
-    -- Open a horizontal terminal with <leader>th
+    -- Open a horizontal terminal with <leader>tt
     map("n", "<leader>tt", "<cmd>ToggleTerm direction=horizontal size=15<CR>", opts)
   end,
 }
