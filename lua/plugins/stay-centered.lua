@@ -12,7 +12,8 @@ return {
   },
   opts = {
     enabled = true,
-    skip_filetypes = { "lua", "typescript" },
+    allow_scroll_move = false,
+    skip_filetypes = {},
   },
   config = function(_, opts)
     require("stay-centered").setup(opts)
